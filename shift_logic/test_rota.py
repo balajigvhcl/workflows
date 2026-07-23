@@ -1,36 +1,33 @@
-import sys, os
-#sys.path.append(os.path.abspath("../2.Database models"))
-sys.path.append(os.path.abspath(".."))  # go up one level to project root
+import datetime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models import Base, Employee
-#from rota_generator import generate_rota
-#from 3_Shift_logic.rota_generator import generate_rota
 from shift_logic.rota_generator import generate_rota
 
-# Connect to the same DB
-engine = create_engine("sqlite:///rota.db")
-Base.metadata.create_all(engine)
-Session = sessionmaker(bind=engine)
-session = Session()
+def setup_db():
+    """Create an in-memory SQLite DB for testing."""
+    engine = create_engine("sqlite:///:memory:")
+    Base.metadata.create_all(engine)
+    Session = sessionmaker(bind=engine)
+    return Session()
 
-# Add sample employees if not already present
-if session.query(Employee).count() == 0:
+def test_generate_rota_with_employees():
+    session = setup_db()
+    # Seed employees
     names = ["Balaji", "Thiyaga", "Muthu", "Sathya", "Narayan"]
     for n in names:
         session.add(Employee(name=n))
     session.commit()
 
-employees = session.query(Employee).all()
+    employees = session.query(Employee).all()
+    shifts = generate_rota(employees, 8, 2026)
 
-# Generate rota for August 2026
-shifts = generate_rota(employees, 8, 2026)
-
-# Print results
-#for s in shifts[:20]:  # show first 20 entries
-#    print(f"{s.date} - {s.shift_type} - Employee {s.employee_id}")
-# Print results with names
-for s in shifts[:20]:  # show first 20 entries
-    emp = session.query(Employee).get(s.employee_id)
-    print(f"{s.date} - {s.shift_type} - {emp.name}")
-
+    # Assertions
+    assert len(shifts) > 0
+    # Ensure weekend nights are paired
+    friday_shifts = [s for s in shifts if s.date.weekday() == 4 and s.shift_type == "9PM IST"]
+    saturday_shifts = [s for s in shifts if s.date.weekday() == 5 and s.shift_type == "9PM IST"]
+    assert len(friday_shifts) == len(saturday_shifts)
+    # Ensure no employee gets more than one weekend pair
+    weekend_ids = {s.employee_id for s in friday_shifts}
+    assert len(weekend_ids) == len(friday_shifts)
