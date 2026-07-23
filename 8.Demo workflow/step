@@ -1,0 +1,10 @@
+Demo Workflow
+Manager runs /generate → rota created for month.
+
+Employees view rota via /rota.
+
+Employee requests leave via /leave.
+
+Manager approves via /approve_leave/<id>.
+
+Team sees updated rota.

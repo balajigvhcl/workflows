@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Shift Rota</title>
+  <style>
+    table { border-collapse: collapse; width: 60%; margin: 20px auto; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: center; }
+    th { background-color: #f2f2f2; }
+  </style>
+</head>
+<body>
+  <h2 style="text-align:center;">Shift Rota</h2>
+  <table id="rotaTable">
+    <thead>
+      <tr><th>Date</th><th>Shift</th><th>Employee</th></tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    fetch("http://127.0.0.1:5000/rota/8/2026")
+      .then(response => response.json())
+      .then(data => {
+        const tbody = document.querySelector("#rotaTable tbody");
+        data.forEach(item => {
+          const row = document.createElement("tr");
+          row.innerHTML = `<td>${item.date}</td><td>${item.shift_type}</td><td>${item.employee}</td>`;
+          tbody.appendChild(row);
+        });
+      });
+  </script>
+</body>
+</html>
+

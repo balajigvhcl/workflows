@@ -1,0 +1,9 @@
+# 🕒 Shift Rota App
+#A lightweight app to generate and manage monthly shift rotations for employees, with leave management and manager approval.
+
+mkdir shift-rota-app && cd shift-rota-app
+git init
+echo "# Shift Rota App" > README.md
+python3 -m venv venv
+source venv/bin/activate
+pip install flask sqlalchemy

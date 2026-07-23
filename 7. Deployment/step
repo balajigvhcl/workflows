@@ -1,0 +1,7 @@
+docker-compose up
+
+Access at http://localhost:5000
+
+Azure Free Tier: Deploy container to Azure App Service.
+
+AWS Free Tier: Run container on EC2.
