@@ -23,7 +23,7 @@ EXPOSE 5000
 ENV PYTHONPATH="/app"
 
 # Run Flask app (development mode)
-CMD ["python", "flask_backend/app.py"]
+#CMD ["python", "flask_backend/app.py"]
 
 # For production, you can replace the CMD with Gunicorn:
-# CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "flask_backend.app:app"]
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:5000", "flask_backend.app:app"]
