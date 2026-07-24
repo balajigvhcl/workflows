@@ -40,6 +40,20 @@ def seed_employees():
 
 seed_employees()
 
+# ✅ NEW: Auto-generate rota if no shifts exist
+def seed_rota(month=8, year=2026):
+    session = Session()
+    if session.query(Shift).count() == 0:
+        employees = session.query(Employee).all()
+        shifts = generate_rota(employees, month, year)
+        for s in shifts:
+            session.add(s)
+        session.commit()
+        print(f"Seeded rota for {month}/{year}")
+    session.close()
+
+seed_rota()
+
 @app.route("/rota/<int:month>/<int:year>")
 def get_rota(month, year):
     session = Session()
