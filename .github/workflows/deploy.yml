@@ -1,17 +1,17 @@
-name: Deploy Shift Rota App
-
-on:
-  push:
-    branches: [ main ]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build Docker image
-        run: docker build -t shift-rota-app .
-      - name: Push to GHCR
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      - run: docker tag shift-rota-app ghcr.io/${{ github.repository }}/shift-rota-app:latest
-      - run: docker push ghcr.io/${{ github.repository }}/shift-rota-app:latest
+#name: Deploy Shift Rota App
+#
+#on:
+#  push:
+#    branches: [ main ]
+#
+#jobs:
+#  build:
+#    runs-on: ubuntu-latest
+#    steps:
+#      - uses: actions/checkout@v2
+#      - name: Build Docker image
+#        run: docker build -t shift-rota-app .
+#      - name: Push to GHCR
+#        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+#      - run: docker tag shift-rota-app ghcr.io/${{ github.repository }}/shift-rota-app:latest
+#      - run: docker push ghcr.io/${{ github.repository }}/shift-rota-app:latest
